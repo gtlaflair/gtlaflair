@@ -155,7 +155,7 @@ defaultContentLanguageInSubdir = false
 
   # Link custom CSS and JS assets
   #   (relative to /static/css and /static/js respectively)
-  custom_css = ["green.css"]
+  custom_css = ["green_alt.css"]
   custom_js  = []
 
   # Publication types.
