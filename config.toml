@@ -59,7 +59,7 @@ defaultContentLanguageInSubdir = false
 
   gravatar = false  # Get your avatar from Gravatar.com? (true/false)
   avatar = "me.jpg"  # Specify an avatar image (in `static/img/` folder) or delete value to disable avatar.
-  email = "glaflair@gmail.com"
+  email = "gtlaflair@gmail.com"
   address = "Honolulu, HI"
   # office_hours = "By appointment"
   # phone = "888 888 88 88"
@@ -155,7 +155,7 @@ defaultContentLanguageInSubdir = false
 
   # Link custom CSS and JS assets
   #   (relative to /static/css and /static/js respectively)
-  custom_css = ["green_alt.css"]
+  custom_css = ["green.css"]
   custom_js  = []
 
   # Publication types.
