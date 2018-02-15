@@ -148,14 +148,14 @@ defaultContentLanguageInSubdir = false
   #   https://sourcethemes.com/academic/post/writing-markdown-latex/#highlighting-options
   highlight = true
   highlight_languages = []
-  highlight_style = "github"
+  # highlight_style = "github"
 
   # Enable native social sharing buttons?
   sharing = true
 
   # Link custom CSS and JS assets
   #   (relative to /static/css and /static/js respectively)
-  custom_css = ["blue.css"]
+  custom_css = ["green.css"]
   custom_js  = []
 
   # Publication types.
