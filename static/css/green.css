@@ -154,7 +154,7 @@ html {
 .alert-note {
   color: #fff;
   background-color: rgb(27, 89, 69); 
-  border-color: #bce8f1;
+  border-color: rgba(153, 181, 172, 0.6);
 }
 
 .alert-warning {
