@@ -44,8 +44,9 @@ a:focus {
  **************************************************/
 
 .btn-primary {
-  border-color: rgb(27, 89, 69);
-  /*background: rgb(27, 89, 69);*/
+  color: rgb(27, 89, 69);
+  /*border-color: rgb(27, 89, 69); */
+  background: rgb(27, 89, 69);
 }
 
 .btn-primary:hover,
@@ -54,7 +55,10 @@ a:focus {
 .btn-primary.active,
 .open > .dropdown-toggle.btn-primary {
   background: rgb(27, 89, 69);
+  color: rgb(103, 144, 131);
 }
+
+
 
 
 /*************************************************
@@ -99,10 +103,19 @@ a:focus {
 
 }
 
+
+
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+    background-color: transparent;
+    color: rgb(103, 144, 131);
+}
+
+
+
 /*************************************************
  *  Toolbar Buttons
  **************************************************/
- 
+
 
 .btn-toolbar .btn.btn-primary {
   background: rgb(27, 89, 69);
@@ -116,7 +129,7 @@ a:focus {
 .btn-toolbar .btn.btn-primary:active,
 .btn-toolbar .btn.btn-primary.active {
   background-color: rgba(2,71,49,1);
-}
+} 
 
 /*************************************************
  *  Publications
