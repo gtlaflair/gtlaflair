@@ -44,9 +44,8 @@ a:focus {
  **************************************************/
 
 .btn-primary {
-  color: rgb(27, 89, 69);
-  /*border-color: rgb(27, 89, 69); */
-  background: rgb(27, 89, 69);
+  border-color: rgb(27, 89, 69);
+  /*background: rgb(27, 89, 69);*/
 }
 
 .btn-primary:hover,
@@ -55,7 +54,6 @@ a:focus {
 .btn-primary.active,
 .open > .dropdown-toggle.btn-primary {
   background: rgb(27, 89, 69);
-  color: rgb(103, 144, 131);
 }
 
 
