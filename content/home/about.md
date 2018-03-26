@@ -42,6 +42,6 @@ weight = 1
  
 +++
 
-# About me
+## About me
 
 I am an Assistant Professor in the Department of Second Language Studies at the University of Hawai'i at Mānoa. I earned my PhD in applied linguistics with a concentration in language assessment and quantitative research methods. I am interested in applications of corpus-based register analysis for examining the validity of the interpretations and uses of productive language assessments. I am also interested in the validity of the interpretations and uses of in-house language assessments in university language programs. My research in this area has examined the use of small-sample test equating of placement tests developed by intensive English programs. In research methods, I am interested in applications of non-parametric analyses to small-sample data such as bootstrapping and the promotion and use of reproducible research tools within the R/Rstudio environment. Occasionally, I write about my interests here.
