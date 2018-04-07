@@ -5,3 +5,4 @@
 gtlaflair.Rproj
 public/
 .DS_Store
+content/post/data/*.csv
