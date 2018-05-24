@@ -31,8 +31,11 @@ To accomplish this, we used what [Doug Biber](https://dougbiber.weebly.com/) cal
 library(tidyverse)
 library(ggridges)
 library(viridis)
+library(plotly)
 
-LT_data <- read_csv('data/LT_data.csv', col_types = 'ccciddidddddcci') 
+LT_data <- read_csv('data/LT_data.csv', col_types = 'ccciddidddddcci') %>%
+  mutate(MELAB_score = replace_na(MELAB_score, "0")) %>%
+  mutate(MELAB_score = as.numeric(MELAB_score))
 vars <- read_csv('data/variables_for_factor_analysis.csv')
 
 ling_feat <- vars %>%
@@ -51,3 +54,18 @@ ling_feat <- vars %>%
 ```
 
 
+
+```{r, echo=FALSE, message=FALSE, error=FALSE, warning=FALSE, fig.align='center'}
+
+colors <- viridisLite::viridis(n = 10)
+
+d3_scatter <- plot_ly(LT_data, x = ~D1, y = ~D2, z = ~D4, color = ~SpeakGrp, size = ~MELAB_score, marker = list(symbol = 'circle', sizemode = 'diameter'), sizes = c(5, 21), colors = c(colors),
+              text = ~paste('MELAB Score:', Score_scale, '<br>D1 Score:', round(D1, 2), '<br>D2 Score:', round(D2, 2), '<br>D4 Score:', round(D4, 2))) %>%
+  add_markers() %>%
+  layout(scene = list(xaxis = list(title = 'Dimension 1'),
+                     yaxis = list(title = 'Dimension 2'),
+                     zaxis = list(title = 'Dimension 4')))
+
+d3_scatter
+
+```
