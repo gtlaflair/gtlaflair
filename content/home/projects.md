@@ -47,6 +47,18 @@ filter_default = 0
 [[filter]]
   name = "Grants"
   tag = ".grants"
+  
+[[filter]]
+  name = "R packages"
+  tag = ".r-package"
+  
+[[filter]]
+  name = "SLA"
+  tag = ".sla"
+
+[[filter]]
+  name = "Reproducible research"
+  tag = ".repro-res"
 
 +++
 
