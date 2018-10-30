@@ -19,3 +19,4 @@ I am a teaching instructor for the following courses at the University of Hawai'
 
 - SLS490: Second Language Testing
 - SLS670: Second Language Quantitative Research
+- SLS600: Introduction to Second Language Studies
