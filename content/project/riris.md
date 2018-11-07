@@ -16,7 +16,7 @@ image_preview = ""
 tags = ["sla", "repro-res"]
 
 # Optional external URL for project (replaces project detail page).
-external_link = "https://cran.r-project.org/package=rcrtan"
+external_link = "https://github.com/ropenscilabs/riris"
 
 # Does the project detail page use math formatting?
 math = false
