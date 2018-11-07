@@ -22,6 +22,10 @@ url_video = ""
 name = "View Journal Article"
 url = "https://doi.org/10.1177/0265532217713951"
 
+[[url_custom]]
+name = "View Post Print"
+url = "https://scholarspace.manoa.hawaii.edu/handle/10125/56004"
+
 # Optional featured image (relative to `static/img/` folder).
 [header]
 image = ""
