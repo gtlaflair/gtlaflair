@@ -59,7 +59,7 @@ defaultContentLanguageInSubdir = false
 
   gravatar = false  # Get your avatar from Gravatar.com? (true/false)
   avatar = "me.jpg"  # Specify an avatar image (in `static/img/` folder) or delete value to disable avatar.
-  email = "gtlaflair@gmail.com"
+  email = ""
   address = "Honolulu, HI"
   # office_hours = "By appointment"
   # phone = "888 888 88 88"
@@ -289,7 +289,7 @@ defaultContentLanguageInSubdir = false
   
 [[menu.main]]
   name = "CV"
-  url = "/pdf/cv-2018-11-07.pdf"
+  url = "/pdf/cv-2018-01-08.pdf"
   weight = 7
 
 # Taxonomies.
