@@ -216,10 +216,10 @@ defaultContentLanguageInSubdir = false
   #
   #   Full list: https://jpswalsh.github.io/academicons/
 
-  [[params.social]]
-    icon = "envelope"
-    icon_pack = "fa"
-    link = "mailto:gtlaflair@gmail.com"
+  #   [[params.social]]
+  #   icon = "envelope"
+  #   icon_pack = "fa"
+  #   link = ""
 
   [[params.social]]
     icon = "twitter"
