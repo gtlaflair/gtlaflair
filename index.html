@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <title>Geoff LaFlair - Assessment Scientist</title>
-    <script>
+    <title>Geoff LaFlair - Principal Assessment Scientist</title>
+    <!-- <script>
         // Hide pulsating backgrounds initially
         document.addEventListener('DOMContentLoaded', function() {
             const audio = document.getElementById('bgMusic');
@@ -21,28 +21,28 @@
             }
         });
 
-        // function isWeekend() {
-        //     const now = new Date();
-        //     const est = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
-        //     const day = est.getDay(); // 0 = Sunday, 5 = Friday
-        //     const hour = est.getHours();
+        function isWeekend() {
+            const now = new Date();
+            const est = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
+            const day = est.getDay(); // 0 = Sunday, 5 = Friday
+            const hour = est.getHours();
             
-        //     return (day === 5 && hour >= 12) || // Friday after 6pm
-        //         (day === 6) ||               // Saturday all day
-        //         (day === 0);                 // Sunday all day
-        // }
+            return (day === 5 && hour >= 12) || // Friday after 6pm
+                (day === 6) ||               // Saturday all day
+                (day === 0);                 // Sunday all day
+        }
 
-        // document.addEventListener('DOMContentLoaded', function() {
-        //     // Initial check
-        //     document.querySelector('.audio-controls').style.display = isWeekend() ? 'block' : 'none';
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initial check
+            document.querySelector('.audio-controls').style.display = isWeekend() ? 'block' : 'none';
             
-        //     // Check every minute
-        //     setInterval(() => {
-        //         document.querySelector('.audio-controls').style.display = isWeekend() ? 'block' : 'none';
-        //     }, 60000);
-        // });
+            // Check every minute
+            setInterval(() => {
+                document.querySelector('.audio-controls').style.display = isWeekend() ? 'block' : 'none';
+            }, 60000);
+        });
         </script>
-    <style>
+    <style> -->
 
 
 /* CSS HEX */
@@ -299,24 +299,23 @@
             updateWithRandomInterval();
         }
 
-        .audio-controls {
+        /*.audio-controls {
             position: fixed;
             bottom: 20px;
             left: 20px;
             z-index: 1000;
             text-align: justify;
-        }
+        }*/
 
         /* Show audio controls only during allowed times */
         /* @media (scripted) {
             .audio-controls.show-during-weekend {
                 display: block;
             }
-        } */
+        }
 
         .audio-controls::after {
             content: "Passed Away by VTEMO";
-            /* display: none; */
             position: absolute;
             left: 30%;
             top: 100%;
@@ -352,7 +351,7 @@
         #playIcon {
             font-size: 2.5rem;
             color: var(--yinmn-blue);
-        }
+        }*/
         
         .kicker {
             position: relative;
