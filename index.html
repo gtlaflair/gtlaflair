@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <title>Geoff LaFlair - Principal Assessment Scientist</title>
-    <!-- <script>
-        // Hide pulsating backgrounds initially
+    <!-- Weekend + audio: pulsating toggle (disabled)
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
             const audio = document.getElementById('bgMusic');
             const playButton = document.getElementById('playButton');
@@ -24,25 +24,23 @@
         function isWeekend() {
             const now = new Date();
             const est = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
-            const day = est.getDay(); // 0 = Sunday, 5 = Friday
+            const day = est.getDay();
             const hour = est.getHours();
-            
-            return (day === 5 && hour >= 12) || // Friday after 6pm
-                (day === 6) ||               // Saturday all day
-                (day === 0);                 // Sunday all day
+
+            return (day === 5 && hour >= 12) ||
+                (day === 6) ||
+                (day === 0);
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            // Initial check
             document.querySelector('.audio-controls').style.display = isWeekend() ? 'block' : 'none';
-            
-            // Check every minute
+
             setInterval(() => {
                 document.querySelector('.audio-controls').style.display = isWeekend() ? 'block' : 'none';
             }, 60000);
         });
-        </script>
-    <style> -->
+    </script>
+    -->
 
 <style>
 /* CSS HEX */
@@ -80,6 +78,7 @@
             }
         }
        
+        /* Audio player / weekend visuals: pulsating backgrounds (disabled)
         @keyframes backgroundPulse {
             0% { background-color: #26547c; }
             25% { background-color: #bdadea; }
@@ -89,8 +88,7 @@
         }
 
         .pulsating-background {
-            display: none;  
-            /* Hide by default */
+            display: none;
             position: absolute;
             top: calc(100vh * var(--random-y));
             left: calc(100vw * var(--random-x));
@@ -116,8 +114,6 @@
                 backgroundPulse 20s infinite, 
                 moveAround 30s infinite,
                 sprayEffect 5s infinite alternate;
-            /* animation-play-state: paused; */
-
         }
 
         @keyframes moveAround {
@@ -155,7 +151,6 @@
             animation-delay: -20s;
         }
 
-
         @keyframes sprayEffect {
             0% {
                 transform: translate(-50%, -50%) scale(0.8) rotate(0deg);
@@ -166,6 +161,7 @@
                 filter: blur(25px);
             }
         }
+        */
 
         @keyframes cycleBorderColors {
             0% { 
@@ -299,16 +295,16 @@
             updateWithRandomInterval();
         }
 
-        /*.audio-controls {
+        /* Audio player + weekend UI (disabled)
+        .audio-controls {
             position: fixed;
             bottom: 20px;
             left: 20px;
             z-index: 1000;
             text-align: justify;
-        }*/
+        }
 
-        /* Show audio controls only during allowed times */
-        /* @media (scripted) {
+        @media (scripted) {
             .audio-controls.show-during-weekend {
                 display: block;
             }
@@ -351,7 +347,8 @@
         #playIcon {
             font-size: 2.5rem;
             color: var(--yinmn-blue);
-        }*/
+        }
+        */
         
         .kicker {
             position: relative;
@@ -565,12 +562,11 @@
             });
         </script>
 
-       
 
 </style>
-    </style>
 </head>
 <body>
+    <!-- Audio player (disabled)
     <div class="audio-controls">
         <button id="playButton">
             <i class="fas fa-play fa-2x" id="playIcon"></i>
@@ -579,46 +575,39 @@
             <source src="VTEMO - Take That (freetouse.com).mp3" type="audio/mp3">
             Your browser does not support the audio element.
         </audio>
-    </div> 
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const audio = document.getElementById('bgMusic');
             const playIcon = document.getElementById('playIcon');
             const playButton = document.getElementById('playButton');
-            
-            // Create and style the scrubber
+
             const scrubber = document.createElement('input');
             scrubber.type = 'range';
             scrubber.min = 0;
             scrubber.value = 0;
             scrubber.style.width = '200px';
             scrubber.style.margin = '0 10px';
-            
-            // Style the scrubber with theme colors
-            scrubber.style.accentColor = '#26547c'; // yinmn-blue
-            scrubber.style.background = 'linear-gradient(to right, #bdadea, #ef476f, #38023b, #26c485)'; // Theme colors
-            
-            // Insert scrubber after play button
+
+            scrubber.style.accentColor = '#26547c';
+            scrubber.style.background = 'linear-gradient(to right, #bdadea, #ef476f, #38023b, #26c485)';
+
             playButton.parentNode.insertBefore(scrubber, playButton.nextSibling);
-            
-            // Update scrubber max when audio loads
+
             audio.addEventListener('loadedmetadata', () => {
                 scrubber.max = audio.duration;
             });
-            
-            // Update scrubber position during playback
+
             audio.addEventListener('timeupdate', () => {
                 scrubber.value = audio.currentTime;
             });
-            
-            // Handle user scrubbing
+
             scrubber.addEventListener('input', () => {
                 audio.currentTime = scrubber.value;
             });
 
             if (playButton && audio) {
-                // Hide pulsating backgrounds initially
                 document.querySelectorAll('.pulsating-background').forEach(el => el.style.display = 'none');
                 document.querySelector('.profile-image').style.animation = 'cycleBorderColors 15s infinite linear';
                 playButton.addEventListener('click', function() {
@@ -650,13 +639,16 @@
             }
         });
     </script>
+    -->
 
+    <!-- Pulsating backgrounds (audio-reactive; disabled)
     <div class="pulsating-background" style="animation-duration: 0.5s, 30s, 5s; background-color: var(--yinmn-blue);"></div>
     <div class="pulsating-background" style="animation-duration: 0.7s, 30s, 5s; --random-x: 0.2; --random-y: 0.8; animation-delay: -5s; background-color: var(--wisteria);"></div>
     <div class="pulsating-background" style="animation-duration: 0.2s, 30s, 5s; --random-x: 0.7; --random-y: 0.3; animation-delay: -10s; background-color: var(--bright-pink-crayola);"></div>
     <div class="pulsating-background" style="animation-duration: 0.8s, 30s, 5s; --random-x: 0.9; --random-y: 0.6; animation-delay: -15s; background-color: var(--russian-violet);"></div>
     <div class="pulsating-background" style="animation-duration: 0.4s, 30s, 5s; --random-x: 0.4; --random-y: 0.1; animation-delay: -20s; background-color: var(--emerald);"></div>
     <div class="pulsating-background" style="animation-duration: 0.9s, 30s, 5s; --random-x: 0.4; --random-y: 0.9; animation-delay: -20s; background-color: var(--yinmn-blue);"></div>
+    -->
 
     <div class="container" style="min-height: 60vh; display: flex; flex-direction: column; max-width: 700px; margin: 0 auto;">
         <div style="flex: 1;">
