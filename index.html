@@ -566,7 +566,8 @@
 </style>
 </head>
 <body>
-    <!-- Audio player (disabled)
+    <!-- Inert storage: not rendered (HTML comments cannot wrap </script> safely). -->
+    <template id="disabled-audio-player-bundle">
     <div class="audio-controls">
         <button id="playButton">
             <i class="fas fa-play fa-2x" id="playIcon"></i>
@@ -639,16 +640,16 @@
             }
         });
     </script>
-    -->
+    </template>
 
-    <!-- Pulsating backgrounds (audio-reactive; disabled)
+    <template id="disabled-pulsating-backgrounds">
     <div class="pulsating-background" style="animation-duration: 0.5s, 30s, 5s; background-color: var(--yinmn-blue);"></div>
     <div class="pulsating-background" style="animation-duration: 0.7s, 30s, 5s; --random-x: 0.2; --random-y: 0.8; animation-delay: -5s; background-color: var(--wisteria);"></div>
     <div class="pulsating-background" style="animation-duration: 0.2s, 30s, 5s; --random-x: 0.7; --random-y: 0.3; animation-delay: -10s; background-color: var(--bright-pink-crayola);"></div>
     <div class="pulsating-background" style="animation-duration: 0.8s, 30s, 5s; --random-x: 0.9; --random-y: 0.6; animation-delay: -15s; background-color: var(--russian-violet);"></div>
     <div class="pulsating-background" style="animation-duration: 0.4s, 30s, 5s; --random-x: 0.4; --random-y: 0.1; animation-delay: -20s; background-color: var(--emerald);"></div>
     <div class="pulsating-background" style="animation-duration: 0.9s, 30s, 5s; --random-x: 0.4; --random-y: 0.9; animation-delay: -20s; background-color: var(--yinmn-blue);"></div>
-    -->
+    </template>
 
     <div class="container" style="min-height: 60vh; display: flex; flex-direction: column; max-width: 700px; margin: 0 auto;">
         <div style="flex: 1;">
