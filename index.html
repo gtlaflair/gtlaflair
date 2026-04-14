@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <title>Geoff LaFlair - Assessment Scientist</title>
+    <script>
+        // Hide pulsating backgrounds initially
+        document.addEventListener('DOMContentLoaded', function() {
+            const audio = document.getElementById('bgMusic');
+            const playButton = document.getElementById('playButton');
+
+            if (playButton && audio) {
+                document.querySelectorAll('.pulsating-background').forEach(el => el.style.display = 'none');
+                playButton.addEventListener('click', function() {
+                    document.querySelectorAll('.pulsating-background').forEach(el => {
+                        el.style.display = audio.paused ? 'block' : 'none';
+                    });
+                });
+            }
+        });
+
+        // function isWeekend() {
+        //     const now = new Date();
+        //     const est = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
+        //     const day = est.getDay(); // 0 = Sunday, 5 = Friday
+        //     const hour = est.getHours();
+            
+        //     return (day === 5 && hour >= 12) || // Friday after 6pm
+        //         (day === 6) ||               // Saturday all day
+        //         (day === 0);                 // Sunday all day
+        // }
+
+        // document.addEventListener('DOMContentLoaded', function() {
+        //     // Initial check
+        //     document.querySelector('.audio-controls').style.display = isWeekend() ? 'block' : 'none';
+            
+        //     // Check every minute
+        //     setInterval(() => {
+        //         document.querySelector('.audio-controls').style.display = isWeekend() ? 'block' : 'none';
+        //     }, 60000);
+        // });
+        </script>
+    <style>
+
+
+/* CSS HEX */
+--yinmn-blue: #26547cff;
+--wisteria: #bdadeaff;
+--bright-pink-crayola: #ef476fff;
+--russian-violet: #38023bff;
+--emerald: #26c485ff;
+
+/* CSS HSL */
+:root {
+    --yinmn-blue: #26547c;
+    --wisteria: #bdadea; 
+    --bright-pink-crayola: #ef476f;
+    --russian-violet: #38023b;
+    --emerald: #26c485;
+}
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        @media (min-width: 768px) {
+            .container {
+                grid-template-columns: 1fr 2fr;
+            }
+        }
+       
+        @keyframes backgroundPulse {
+            0% { background-color: #26547c; }
+            25% { background-color: #bdadea; }
+            50% { background-color: #ef476f; }
+            75% { background-color: #38023b; }
+            100% { background-color: #26c485; }
+        }
+
+        .pulsating-background {
+            display: none;  
+            /* Hide by default */
+            position: absolute;
+            top: calc(100vh * var(--random-y));
+            left: calc(100vw * var(--random-x));
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            z-index: -1;
+            animation: backgroundPulse 20s infinite, moveAround 30s infinite;
+            opacity: calc(0.25 + (0.65 - 0.25) * var(--random, 0.5));
+            border-radius: 50%;
+            filter: blur(20px);
+            mix-blend-mode: overlay;
+            box-shadow: 
+                inset 0 0 50px rgba(255,255,255,0.3),
+                0 0 30px rgba(0,0,0,0.2);
+            background-image: radial-gradient(
+                circle at 30% 30%,
+                rgba(255,255,255,0.4) 0%,
+                transparent 60%
+            );
+            transform-origin: center;
+            animation: 
+                backgroundPulse 20s infinite, 
+                moveAround 30s infinite,
+                sprayEffect 5s infinite alternate;
+            /* animation-play-state: paused; */
+
+        }
+
+        @keyframes moveAround {
+            0%, 100% { 
+                top: calc(100vh * var(--random-y));
+                left: calc(100vw * var(--random-x));
+            }
+            50% {
+                top: calc(100vh * (1 - var(--random-y)));
+                left: calc(100vw * (1 - var(--random-x)));
+            }
+        }
+ 
+        .pulsating-background:nth-child(2) {
+            --random-x: 0.2;
+            --random-y: 0.8;
+            animation-delay: -5s;
+        }
+
+        .pulsating-background:nth-child(3) {
+            --random-x: 0.7;
+            --random-y: 0.3;
+            animation-delay: -10s;
+        }
+
+        .pulsating-background:nth-child(4) {
+            --random-x: 0.9;
+            --random-y: 0.6;
+            animation-delay: -15s;
+        }
+
+        .pulsating-background:nth-child(5) {
+            --random-x: 0.4;
+            --random-y: 0.1;
+            animation-delay: -20s;
+        }
+
+
+        @keyframes sprayEffect {
+            0% {
+                transform: translate(-50%, -50%) scale(0.8) rotate(0deg);
+                filter: blur(15px);
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1.2) rotate(360deg);
+                filter: blur(25px);
+            }
+        }
+
+        @keyframes cycleBorderColors {
+            0% { 
+                border-color: #26547cff;
+                background-color: rgba(38, 84, 124, 0.2);
+            }  /* yinmn-blue */
+            20% { 
+                border-color: #bdadeaff;
+                background-color: rgba(189, 173, 234, 0.2); 
+            }  /* wisteria */
+            40% { 
+                border-color: #ef476fff;
+                background-color: rgba(239, 71, 111, 0.2);
+            }  /* bright-pink-crayola */
+            60% { 
+                border-color: #38023bff;
+                background-color: rgba(56, 2, 59, 0.2);
+            }  /* russian-violet */
+            80% { 
+                border-color: #26c485ff;
+                background-color: rgba(38, 196, 133, 0.2);
+            }  /* emerald */
+            100% { 
+                border-color: #26547cff;
+                background-color: rgba(38, 84, 124, 0.2);
+            }  /* yinmn-blue */
+        }
+
+        .profile-image {
+            width: 100%;
+            max-width: 240px;
+            border-radius: 30px;
+            border: 15px solid rgba(38, 84, 124, 0.6);  /* yinmn-blue with transparency */
+            margin: 0 auto;
+            display: block;
+            background-clip: padding-box;
+            animation: cycleBorderColors 15s infinite linear;
+        }
+        a {
+            text-decoration-skip-ink: none;
+            text-decoration-thickness: 2px;
+            text-underline-offset: 4px;
+            text-decoration-line: underline;
+            text-decoration-style: solid;
+            border-top-left-radius: 2px;
+            border-top-right-radius: 2px;
+        }
+        .nav-links {
+            margin: 30px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+        .social-links {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .social-links a {
+            text-decoration: none;
+            color: #666;
+        }
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            .nav-links, .social-links {
+                justify-content: center;
+            }
+            h1 {
+                text-align: center;
+            }
+            p {
+                text-align: justify;
+            }
+        }
+    </style>
+
+
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Honk&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+        body {
+            font-family: 'Nunito', sans-serif;
+        }
+
+        h1 {
+            font-family: 'Honk', system-ui;
+            /* animation: randomSize 1s infinite; */
+        }
+
+        @keyframes randomSize {
+            to {
+                font-size: calc(5.5rem * (0.8 + 0.4 * var(--random)));
+            }
+        }
+
+        /* Add animation with random timing */
+        h1 {
+            --random: 0;
+            /* animation: randomSize 0.5s infinite;  */
+            /*120 BPM = 0.5s per beat*/
+            position: relative;
+            height: 5.5rem;
+            line-height: 5.5rem;
+            overflow: hidden;
+        }
+
+        /* Update random value periodically */
+        @property --random {
+            syntax: '<number>';
+            initial-value: 0;
+            inherits: false;
+        }
+
+        script {
+            let h1 = document.querySelector('h1');
+            function updateWithRandomInterval() {
+                h1.style.setProperty('--random', Math.random());
+                setTimeout(updateWithRandomInterval, 500); // Match animation duration
+            }
+            updateWithRandomInterval();
+        }
+
+        .audio-controls {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
+            text-align: justify;
+        }
+
+        /* Show audio controls only during allowed times */
+        /* @media (scripted) {
+            .audio-controls.show-during-weekend {
+                display: block;
+            }
+        } */
+
+        .audio-controls::after {
+            content: "Passed Away by VTEMO";
+            /* display: none; */
+            position: absolute;
+            left: 30%;
+            top: 100%;
+            transform: translateY(-50%);
+            font-size: 0.5rem;
+            color: #6d6d6d;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            height: 100%;
+        }
+
+        .audio-controls.playing::after {
+            display: float;
+        }
+
+        #playButton {
+            background: none;
+            border: 1px solid var(--yinmn-blue);
+            cursor: pointer;
+            padding: 15px;
+            border-radius: 50%;
+            background-color: var(--yinmn-blue);
+            animation: cycleBorderColors 10s infinite;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease;
+        }
+
+        #playButton:hover {
+            transform: scale(1.1);
+        }
+
+        #playIcon {
+            font-size: 2.5rem;
+            color: var(--yinmn-blue);
+        }
+        
+        .kicker {
+            position: relative;
+            transition: color 1s ease;
+            padding-bottom: 15px;
+        }
+
+        .kicker:hover {
+            animation: randomColor 10s infinite;
+        }
+
+        .kicker:after {
+            content: '';
+            width: 0;
+            height: 15px;
+            border-radius: 6px;
+            background-color: #26547c;
+            position: absolute;
+            bottom: 5px;
+            left: 0;
+            transition: width 1s ease, background-color 1s ease;
+        }
+
+        .kicker:hover:after {
+            width: 100%;
+            /* content: '';
+            height: 15px;
+            border-radius: 6px;
+            position: absolute;
+            bottom: 5px;
+            left: 0;
+            transition: width 1s ease, background-color 1s ease; */
+        }
+
+        .circler {
+            position: relative;
+            /* transition: color 1s ease; */
+            padding: 0 20px;
+            color: #ef476f;
+        }
+
+        .circler:hover {
+            animation: randomColor 10s infinite;
+        }
+
+        .circler::before,
+        .circler::after {
+            content: '•';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            text-shadow: 0 0 10px currentColor;
+        }
+
+        .circler::before {
+            filter: blur(2px);
+            animation: trailBlur 2s infinite;
+        }
+
+        .circler::after {
+            filter: blur(2px);
+            animation: trailBlur 3s infinite;
+        }
+
+        @keyframes trailBlur {
+            0% { filter: blur(2px); }
+            50% { filter: blur(8px); }
+            100% { filter: blur(2px); }
+        }
+
+        .circler:hover::before {
+            opacity: 1;
+            animation: orbitFast 2s linear infinite;
+        }
+
+        .circler:hover::after {
+            opacity: 1;
+            animation: orbitSlow 3s linear infinite;
+        }
+
+        .circler::before,
+        .circler::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: currentColor;
+            border-radius: 50%;
+            box-shadow: 0 0 20px 5px currentColor;
+        }
+
+        @keyframes orbitFast {
+            from {
+                transform: translate(-50%, -50%) rotate(0deg) translate(20px) rotate(0deg);
+            }
+            to {
+                transform: translate(-50%, -50%) rotate(360deg) translate(20px) rotate(-360deg);
+            }
+        }
+
+        @keyframes orbitSlow {
+            from {
+                transform: translate(-50%, -50%) rotate(0deg) translate(30px) rotate(0deg);
+            }
+            to {
+                transform: translate(-50%, -50%) rotate(360deg) translate(30px) rotate(-360deg);
+            }
+        }
+
+        .center-picker {
+            position: relative;
+            transition: color 1s ease;
+            padding-bottom: 8px;
+            color: #ef476f;
+        }
+
+        .center-picker:hover {
+            animation: randomColor 5s infinite;
+        }
+
+        .center-picker:after {
+            content: '';
+            width: 0;
+            height: 7px;
+            border-radius: 6px;
+            background-color: #26547c;
+            color: #ef476f;
+            position: absolute;
+            bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: width 1s ease, background-color 1s ease;
+        }
+
+        .center-picker:hover:after {
+            width: 100%;
+            animation: randomUnderline 5s infinite;
+        }
+
+        
+        .picker {
+            position: relative;
+            transition: color 1s ease;
+            padding-bottom: 8px;
+            color: #ef476f;
+        }
+
+        .picker:hover {
+            animation: randomColor 10s infinite;
+        }
+
+        .picker:after {
+            content: '';
+            width: 0;
+            height: 7px;
+            border-radius: 6px;
+            background-color: #26547c;
+            color: #ef476f;
+            position: absolute;
+            bottom: 5px;
+            left: 0;
+            transition: width 1s ease, background-color 1s ease;
+        }
+
+        .picker:hover:after {
+            width: 100%;
+            animation: randomUnderline 10s infinite;
+            /* content: '';
+            height: 15px;
+            border-radius: 6px;
+            position: absolute;
+            bottom: 5px;
+            left: 0;
+            transition: width 1s ease, background-color 1s ease; */
+        }
+
+
+
+        @keyframes randomColor {
+            0% { color: #26547c; }
+            25% { color: #bdadea; }
+            50% { color: #ef476f; }
+            75% { color: #38023b; }
+            100% { color: #26c485; }
+        }
+
+        @keyframes randomUnderline {
+            0% { background-color: #26547c; }
+            25% { background-color: #bdadea; }
+            50% { background-color: #ef476f; }
+            75% { background-color: #38023b; }
+            100% { background-color: #26c485; }
+        }
+
+        .kicker:hover:after {
+            background-color: var(--underline-color);
+            width: 100%;
+            animation: randomUnderline 10s infinite;
+        }
+
+        <script>
+            document.querySelectorAll('.kicker').forEach(kicker => {
+                kicker.addEventListener('mouseenter', e => {
+                    const colors = ['#26547c', '#bdadea', '#ef476f', '#38023b', '#26c485'];
+                    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                    e.target.style.setProperty('--underline-color', randomColor);
+                });
+            });
+        </script>
+
+       
+
+</style>
+    </style>
+</head>
+<body>
+    <div class="audio-controls">
+        <button id="playButton">
+            <i class="fas fa-play fa-2x" id="playIcon"></i>
+        </button>
+        <audio id="bgMusic" loop>
+            <source src="VTEMO - Take That (freetouse.com).mp3" type="audio/mp3">
+            Your browser does not support the audio element.
+        </audio>
+    </div> 
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const audio = document.getElementById('bgMusic');
+            const playIcon = document.getElementById('playIcon');
+            const playButton = document.getElementById('playButton');
+            
+            // Create and style the scrubber
+            const scrubber = document.createElement('input');
+            scrubber.type = 'range';
+            scrubber.min = 0;
+            scrubber.value = 0;
+            scrubber.style.width = '200px';
+            scrubber.style.margin = '0 10px';
+            
+            // Style the scrubber with theme colors
+            scrubber.style.accentColor = '#26547c'; // yinmn-blue
+            scrubber.style.background = 'linear-gradient(to right, #bdadea, #ef476f, #38023b, #26c485)'; // Theme colors
+            
+            // Insert scrubber after play button
+            playButton.parentNode.insertBefore(scrubber, playButton.nextSibling);
+            
+            // Update scrubber max when audio loads
+            audio.addEventListener('loadedmetadata', () => {
+                scrubber.max = audio.duration;
+            });
+            
+            // Update scrubber position during playback
+            audio.addEventListener('timeupdate', () => {
+                scrubber.value = audio.currentTime;
+            });
+            
+            // Handle user scrubbing
+            scrubber.addEventListener('input', () => {
+                audio.currentTime = scrubber.value;
+            });
+
+            if (playButton && audio) {
+                // Hide pulsating backgrounds initially
+                document.querySelectorAll('.pulsating-background').forEach(el => el.style.display = 'none');
+                document.querySelector('.profile-image').style.animation = 'cycleBorderColors 15s infinite linear';
+                playButton.addEventListener('click', function() {
+                    try {
+                        if (audio.paused) {
+                            audio.play()
+                            .then(() => {
+                                playIcon.className = 'fas fa-pause';
+                                document.querySelectorAll('.pulsating-background').forEach(el => {
+                                    el.style.display = 'block';
+                                });
+                                document.querySelector('.profile-image').style.animation = 'cycleBorderColors 1s infinite linear';
+                            })
+                            .catch(error => {
+                                console.error('Error playing audio:', error);
+                            });
+                        } else {
+                            audio.pause();
+                            playIcon.className = 'fas fa-play';
+                            document.querySelectorAll('.pulsating-background').forEach(el => {
+                                el.style.display = 'none';
+                            });
+                            document.querySelector('.profile-image').style.animation = 'cycleBorderColors 15s infinite linear';
+                        }
+                    } catch(error) {
+                        console.error('Error toggling audio:', error);
+                    }
+                });
+            }
+        });
+    </script>
+
+    <div class="pulsating-background" style="animation-duration: 0.5s, 30s, 5s; background-color: var(--yinmn-blue);"></div>
+    <div class="pulsating-background" style="animation-duration: 0.7s, 30s, 5s; --random-x: 0.2; --random-y: 0.8; animation-delay: -5s; background-color: var(--wisteria);"></div>
+    <div class="pulsating-background" style="animation-duration: 0.2s, 30s, 5s; --random-x: 0.7; --random-y: 0.3; animation-delay: -10s; background-color: var(--bright-pink-crayola);"></div>
+    <div class="pulsating-background" style="animation-duration: 0.8s, 30s, 5s; --random-x: 0.9; --random-y: 0.6; animation-delay: -15s; background-color: var(--russian-violet);"></div>
+    <div class="pulsating-background" style="animation-duration: 0.4s, 30s, 5s; --random-x: 0.4; --random-y: 0.1; animation-delay: -20s; background-color: var(--emerald);"></div>
+    <div class="pulsating-background" style="animation-duration: 0.9s, 30s, 5s; --random-x: 0.4; --random-y: 0.9; animation-delay: -20s; background-color: var(--yinmn-blue);"></div>
+
+    <div class="container" style="min-height: 60vh; display: flex; flex-direction: column; max-width: 700px; margin: 0 auto;">
+        <div style="flex: 1;">
+            <h1 style="color: black; padding: 15px; text-align: center; margin: 0 0 20px 0; border-radius: 5px; font-size: 5.5rem;">Geoff LaFlair</h1>
+            <div style="display: flex; justify-content: center;">
+                <img src="geoff.png" alt="Geoff LaFlair" class="profile-image">
+            </div>
+            <!-- <p style="text-align: center;">Principal Assessment Scientist at Duolingo</p> -->
+            
+            <div class="nav-links" style="justify-content: center;">
+            
+                <a href="geoff_cv.pdf" class="circler" style="text-decoration:none;">Curriculum Vitae</a>
+            </div>
+
+            
+
+            <p>Geoff LaFlair is a Principal Assessment Scientist at Duolingo where he co-leads Assessment <a href="https://englishtest.duolingo.com/research" target="_blank" class="center-picker" style="text-decoration:none;">Research and Development</a> for the <a href="https://englishtest.duolingo.com/" target="_blank" class="center-picker" style="text-decoration:none;">Duolingo English Test</a>. He holds an MA in TESOL from Central Michigan University and a PhD in Applied Linguistics from Northern Arizona University.</p>
+            
+            <p>Prior to joining Duolingo, he was an Assistant Professor in the Department of Second Language Studies at the University of Hawai'i at Mānoa and the Director of Assessment in the Center for ESL at the University of Kentucky.</p>
+            
+            <p>His research interests are situated at the intersection of language assessment, psychometrics, and machine learning, focusing on the application of research from these fields in researching and developing operational language assessments.</p>
+        
+            <div class="social-links">
+                <a href="https://scholar.google.com/citations?user=QPU66QMAAAAJ&hl=en&oi=ao" target="_blank"><i class="fa fa-graduation-cap"></i> Google Scholar</a>
+                <a href="https://orcid.org/0000-0003-0306-6550" target="_blank"><i class="fab fa-orcid"></i> ORCID</a>
+                <a href="https://github.com/gtlaflair" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+                <a href="https://www.linkedin.com/in/geoff-laflair-2370187/" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
+            </div>
+        </div>
+
+        
+    </div>
+
+    
+</body>
+</html>
