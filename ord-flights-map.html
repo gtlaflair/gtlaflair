@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Direct Flights to Chicago O'Hare (ORD)</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a1a; color: #fff; }
+  #map { width: 100%; height: 100vh; background: #0a0a1a; }
+  .legend {
+    position: absolute; top: 16px; right: 16px; z-index: 1000;
+    background: rgba(10,10,26,0.92); border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 10px; padding: 16px 20px; backdrop-filter: blur(12px);
+    max-width: 260px; font-size: 13px; line-height: 1.5;
+  }
+  .legend h2 { font-size: 16px; margin-bottom: 8px; font-weight: 600; }
+  .legend .stat { color: #94a3b8; }
+  .legend .stat strong { color: #fff; }
+  .legend-item { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+  .legend-line { width: 24px; height: 3px; border-radius: 2px; }
+  .search-box {
+    position: absolute; top: 16px; left: 60px; z-index: 1000;
+    background: rgba(10,10,26,0.92); border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px; padding: 8px 12px; backdrop-filter: blur(12px);
+  }
+  .search-box input {
+    background: transparent; border: none; color: #fff; font-size: 14px;
+    outline: none; width: 220px;
+  }
+  .search-box input::placeholder { color: #64748b; }
+  .tooltip-custom {
+    background: rgba(10,10,26,0.95) !important; border: 1px solid rgba(255,255,255,0.2) !important;
+    color: #fff !important; border-radius: 6px !important; padding: 6px 10px !important;
+    font-size: 12px !important; box-shadow: 0 4px 12px rgba(0,0,0,0.4) !important;
+  }
+  .tooltip-custom .leaflet-tooltip-arrow { display: none; }
+  .leaflet-container { background: #0a0a1a !important; }
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div class="legend">
+  <h2>Chicago O'Hare (ORD)</h2>
+  <p class="stat">Direct flights worldwide</p>
+  <p class="stat" id="route-count"></p>
+  <div class="legend-item"><div class="legend-line" style="background:#f97316"></div> Domestic US</div>
+  <div class="legend-item"><div class="legend-line" style="background:#06b6d4"></div> Canada / Mexico / Caribbean</div>
+  <div class="legend-item"><div class="legend-line" style="background:#a78bfa"></div> Europe</div>
+  <div class="legend-item"><div class="legend-line" style="background:#f472b6"></div> Asia / Pacific</div>
+  <div class="legend-item"><div class="legend-line" style="background:#34d399"></div> Middle East / Africa</div>
+  <div class="legend-item"><div class="legend-line" style="background:#fbbf24"></div> Central / South America</div>
+</div>
+<div class="search-box">
+  <input type="text" id="search" placeholder="Search city or airport code..." />
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const ORD = [41.9742, -87.9073];
+
+const routes = [
+  // === DOMESTIC US ===
+  { city: "New York (JFK)", code: "JFK", lat: 40.6413, lon: -73.7781, region: "domestic" },
+  { city: "New York (LGA)", code: "LGA", lat: 40.7769, lon: -73.8740, region: "domestic" },
+  { city: "New York (EWR)", code: "EWR", lat: 40.6895, lon: -74.1745, region: "domestic" },
+  { city: "Los Angeles", code: "LAX", lat: 33.9425, lon: -118.4081, region: "domestic" },
+  { city: "San Francisco", code: "SFO", lat: 37.6213, lon: -122.3790, region: "domestic" },
+  { city: "Miami", code: "MIA", lat: 25.7959, lon: -80.2870, region: "domestic" },
+  { city: "Fort Lauderdale", code: "FLL", lat: 26.0726, lon: -80.1527, region: "domestic" },
+  { city: "Atlanta", code: "ATL", lat: 33.6407, lon: -84.4277, region: "domestic" },
+  { city: "Dallas/Fort Worth", code: "DFW", lat: 32.8998, lon: -97.0403, region: "domestic" },
+  { city: "Houston (IAH)", code: "IAH", lat: 29.9902, lon: -95.3368, region: "domestic" },
+  { city: "Houston (HOU)", code: "HOU", lat: 29.6454, lon: -95.2789, region: "domestic" },
+  { city: "Denver", code: "DEN", lat: 39.8561, lon: -104.6737, region: "domestic" },
+  { city: "Seattle", code: "SEA", lat: 47.4502, lon: -122.3088, region: "domestic" },
+  { city: "Boston", code: "BOS", lat: 42.3656, lon: -71.0096, region: "domestic" },
+  { city: "Washington (DCA)", code: "DCA", lat: 38.8512, lon: -77.0402, region: "domestic" },
+  { city: "Washington (IAD)", code: "IAD", lat: 38.9531, lon: -77.4565, region: "domestic" },
+  { city: "Philadelphia", code: "PHL", lat: 39.8744, lon: -75.2424, region: "domestic" },
+  { city: "Phoenix", code: "PHX", lat: 33.4373, lon: -112.0078, region: "domestic" },
+  { city: "Las Vegas", code: "LAS", lat: 36.0840, lon: -115.1537, region: "domestic" },
+  { city: "Minneapolis", code: "MSP", lat: 44.8848, lon: -93.2223, region: "domestic" },
+  { city: "Detroit", code: "DTW", lat: 42.2162, lon: -83.3554, region: "domestic" },
+  { city: "Charlotte", code: "CLT", lat: 35.2140, lon: -80.9431, region: "domestic" },
+  { city: "Orlando", code: "MCO", lat: 28.4312, lon: -81.3081, region: "domestic" },
+  { city: "Tampa", code: "TPA", lat: 27.9755, lon: -82.5332, region: "domestic" },
+  { city: "San Diego", code: "SAN", lat: 32.7338, lon: -117.1933, region: "domestic" },
+  { city: "Portland", code: "PDX", lat: 45.5898, lon: -122.5951, region: "domestic" },
+  { city: "Nashville", code: "BNA", lat: 36.1263, lon: -86.6774, region: "domestic" },
+  { city: "Austin", code: "AUS", lat: 30.1975, lon: -97.6664, region: "domestic" },
+  { city: "San Antonio", code: "SAT", lat: 29.5337, lon: -98.4698, region: "domestic" },
+  { city: "Raleigh-Durham", code: "RDU", lat: 35.8801, lon: -78.7880, region: "domestic" },
+  { city: "Salt Lake City", code: "SLC", lat: 40.7899, lon: -111.9791, region: "domestic" },
+  { city: "St. Louis", code: "STL", lat: 38.7487, lon: -90.3700, region: "domestic" },
+  { city: "Kansas City", code: "MCI", lat: 39.2976, lon: -94.7139, region: "domestic" },
+  { city: "San Jose", code: "SJC", lat: 37.3639, lon: -121.9289, region: "domestic" },
+  { city: "Pittsburgh", code: "PIT", lat: 40.4915, lon: -80.2329, region: "domestic" },
+  { city: "Indianapolis", code: "IND", lat: 39.7173, lon: -86.2944, region: "domestic" },
+  { city: "Cleveland", code: "CLE", lat: 41.4058, lon: -81.8539, region: "domestic" },
+  { city: "Columbus", code: "CMH", lat: 39.9981, lon: -82.8919, region: "domestic" },
+  { city: "Cincinnati", code: "CVG", lat: 39.0488, lon: -84.6678, region: "domestic" },
+  { city: "New Orleans", code: "MSY", lat: 29.9934, lon: -90.2580, region: "domestic" },
+  { city: "Milwaukee", code: "MKE", lat: 42.9472, lon: -87.8966, region: "domestic" },
+  { city: "Sacramento", code: "SMF", lat: 38.6954, lon: -121.5908, region: "domestic" },
+  { city: "Jacksonville", code: "JAX", lat: 30.4941, lon: -81.6879, region: "domestic" },
+  { city: "Memphis", code: "MEM", lat: 35.0424, lon: -89.9767, region: "domestic" },
+  { city: "Louisville", code: "SDF", lat: 38.1744, lon: -85.7360, region: "domestic" },
+  { city: "Richmond", code: "RIC", lat: 37.5052, lon: -77.3197, region: "domestic" },
+  { city: "Norfolk", code: "ORF", lat: 36.8946, lon: -76.2012, region: "domestic" },
+  { city: "Buffalo", code: "BUF", lat: 42.9405, lon: -78.7322, region: "domestic" },
+  { city: "Hartford", code: "BDL", lat: 41.9389, lon: -72.6832, region: "domestic" },
+  { city: "Omaha", code: "OMA", lat: 41.3032, lon: -95.8941, region: "domestic" },
+  { city: "Oklahoma City", code: "OKC", lat: 35.3931, lon: -97.6007, region: "domestic" },
+  { city: "Tulsa", code: "TUL", lat: 36.1984, lon: -95.8881, region: "domestic" },
+  { city: "Albuquerque", code: "ABQ", lat: 35.0402, lon: -106.6090, region: "domestic" },
+  { city: "El Paso", code: "ELP", lat: 31.8067, lon: -106.3778, region: "domestic" },
+  { city: "Tucson", code: "TUS", lat: 32.1161, lon: -110.9410, region: "domestic" },
+  { city: "Boise", code: "BOI", lat: 43.5644, lon: -116.2228, region: "domestic" },
+  { city: "Spokane", code: "GEG", lat: 47.6199, lon: -117.5338, region: "domestic" },
+  { city: "Anchorage", code: "ANC", lat: 61.1743, lon: -149.9962, region: "domestic" },
+  { city: "Honolulu", code: "HNL", lat: 21.3187, lon: -157.9224, region: "domestic" },
+  { city: "Maui", code: "OGG", lat: 20.8986, lon: -156.4305, region: "domestic" },
+  { city: "Kona", code: "KOA", lat: 19.7388, lon: -156.0456, region: "domestic" },
+  { city: "Palm Beach", code: "PBI", lat: 26.6832, lon: -80.0956, region: "domestic" },
+  { city: "Savannah", code: "SAV", lat: 32.1276, lon: -81.2021, region: "domestic" },
+  { city: "Charleston", code: "CHS", lat: 32.8986, lon: -80.0405, region: "domestic" },
+  { city: "Myrtle Beach", code: "MYR", lat: 33.6797, lon: -78.9283, region: "domestic" },
+  { city: "Des Moines", code: "DSM", lat: 41.5341, lon: -93.6631, region: "domestic" },
+  { city: "Little Rock", code: "LIT", lat: 34.7294, lon: -92.2243, region: "domestic" },
+  { city: "Madison", code: "MSN", lat: 43.1399, lon: -89.3375, region: "domestic" },
+  { city: "Grand Rapids", code: "GRR", lat: 42.8808, lon: -85.5228, region: "domestic" },
+  { city: "Bentonville (XNA)", code: "XNA", lat: 36.2819, lon: -94.3068, region: "domestic" },
+  { city: "Greenville", code: "GSP", lat: 34.8957, lon: -82.2189, region: "domestic" },
+  { city: "Pensacola", code: "PNS", lat: 30.4734, lon: -87.1866, region: "domestic" },
+  { city: "Knoxville", code: "TYS", lat: 35.8110, lon: -83.9940, region: "domestic" },
+  { city: "Lexington", code: "LEX", lat: 38.0365, lon: -84.6059, region: "domestic" },
+  { city: "Dayton", code: "DAY", lat: 39.9024, lon: -84.2194, region: "domestic" },
+  { city: "Birmingham", code: "BHM", lat: 33.5629, lon: -86.7535, region: "domestic" },
+  { city: "Wichita", code: "ICT", lat: 37.6499, lon: -97.4331, region: "domestic" },
+  { city: "Colorado Springs", code: "COS", lat: 38.8058, lon: -104.7009, region: "domestic" },
+  { city: "Reno", code: "RNO", lat: 39.4991, lon: -119.7681, region: "domestic" },
+  { city: "Ontario (CA)", code: "ONT", lat: 34.0560, lon: -117.6012, region: "domestic" },
+  { city: "Ft. Myers", code: "RSW", lat: 26.5362, lon: -81.7552, region: "domestic" },
+  { city: "Sarasota", code: "SRQ", lat: 27.3954, lon: -82.5544, region: "domestic" },
+
+  // === CANADA ===
+  { city: "Toronto (YYZ)", code: "YYZ", lat: 43.6777, lon: -79.6248, region: "americas" },
+  { city: "Montreal", code: "YUL", lat: 45.4706, lon: -73.7408, region: "americas" },
+  { city: "Vancouver", code: "YVR", lat: 49.1967, lon: -123.1815, region: "americas" },
+  { city: "Calgary", code: "YYC", lat: 51.1215, lon: -114.0076, region: "americas" },
+  { city: "Ottawa", code: "YOW", lat: 45.3225, lon: -75.6692, region: "americas" },
+  { city: "Edmonton", code: "YEG", lat: 53.3097, lon: -113.5800, region: "americas" },
+  { city: "Winnipeg", code: "YWG", lat: 49.9100, lon: -97.2399, region: "americas" },
+  { city: "Halifax", code: "YHZ", lat: 44.8808, lon: -63.5085, region: "americas" },
+
+  // === MEXICO ===
+  { city: "Mexico City", code: "MEX", lat: 19.4363, lon: -99.0721, region: "americas" },
+  { city: "Cancun", code: "CUN", lat: 21.0365, lon: -86.8771, region: "americas" },
+  { city: "Guadalajara", code: "GDL", lat: 20.5218, lon: -103.3113, region: "americas" },
+  { city: "Puerto Vallarta", code: "PVR", lat: 20.6801, lon: -105.2544, region: "americas" },
+  { city: "San Jose del Cabo", code: "SJD", lat: 23.1518, lon: -109.7215, region: "americas" },
+  { city: "Monterrey", code: "MTY", lat: 25.7785, lon: -100.1070, region: "americas" },
+  { city: "Leon/Guanajuato", code: "BJX", lat: 20.9935, lon: -101.4806, region: "americas" },
+
+  // === CARIBBEAN ===
+  { city: "Nassau", code: "NAS", lat: 25.0390, lon: -77.4662, region: "americas" },
+  { city: "Montego Bay", code: "MBJ", lat: 18.5037, lon: -77.9134, region: "americas" },
+  { city: "Punta Cana", code: "PUJ", lat: 18.5674, lon: -68.3634, region: "americas" },
+  { city: "San Juan", code: "SJU", lat: 18.4394, lon: -66.0018, region: "americas" },
+  { city: "Aruba", code: "AUA", lat: 12.5014, lon: -70.0152, region: "americas" },
+  { city: "Grand Cayman", code: "GCM", lat: 19.2928, lon: -81.3577, region: "americas" },
+  { city: "St. Thomas", code: "STT", lat: 18.3373, lon: -64.9734, region: "americas" },
+  { city: "Turks & Caicos", code: "PLS", lat: 21.7736, lon: -72.2659, region: "americas" },
+  { city: "Bermuda", code: "BDA", lat: 32.3640, lon: -64.6787, region: "americas" },
+  { city: "Curacao", code: "CUR", lat: 12.1889, lon: -68.9598, region: "americas" },
+  { city: "St. Maarten", code: "SXM", lat: 18.0410, lon: -63.1089, region: "americas" },
+
+  // === CENTRAL / SOUTH AMERICA ===
+  { city: "Bogota", code: "BOG", lat: 4.7016, lon: -74.1469, region: "south_america" },
+  { city: "Lima", code: "LIM", lat: -12.0219, lon: -77.1143, region: "south_america" },
+  { city: "Sao Paulo", code: "GRU", lat: -23.4356, lon: -46.4731, region: "south_america" },
+  { city: "Buenos Aires", code: "EZE", lat: -34.8222, lon: -58.5358, region: "south_america" },
+  { city: "Santiago", code: "SCL", lat: -33.3930, lon: -70.7858, region: "south_america" },
+  { city: "Panama City", code: "PTY", lat: 9.0714, lon: -79.3835, region: "south_america" },
+  { city: "San Jose (Costa Rica)", code: "SJO", lat: 9.9939, lon: -84.2088, region: "south_america" },
+  { city: "Guatemala City", code: "GUA", lat: 14.5833, lon: -90.5275, region: "south_america" },
+  { city: "San Salvador", code: "SAL", lat: 13.4409, lon: -89.0557, region: "south_america" },
+  { city: "Belize City", code: "BZE", lat: 17.5391, lon: -88.3082, region: "south_america" },
+  { city: "Quito", code: "UIO", lat: -0.1292, lon: -78.3575, region: "south_america" },
+  { city: "Medellin", code: "MDE", lat: 6.1645, lon: -75.4231, region: "south_america" },
+  { city: "Guayaquil", code: "GYE", lat: -2.1574, lon: -79.8837, region: "south_america" },
+
+  // === EUROPE ===
+  { city: "London (LHR)", code: "LHR", lat: 51.4700, lon: -0.4543, region: "europe" },
+  { city: "London (STN)", code: "STN", lat: 51.8860, lon: 0.2389, region: "europe" },
+  { city: "Paris (CDG)", code: "CDG", lat: 49.0097, lon: 2.5479, region: "europe" },
+  { city: "Frankfurt", code: "FRA", lat: 50.0379, lon: 8.5622, region: "europe" },
+  { city: "Munich", code: "MUC", lat: 48.3537, lon: 11.7750, region: "europe" },
+  { city: "Amsterdam", code: "AMS", lat: 52.3105, lon: 4.7683, region: "europe" },
+  { city: "Dublin", code: "DUB", lat: 53.4264, lon: -6.2499, region: "europe" },
+  { city: "Zurich", code: "ZRH", lat: 47.4647, lon: 8.5492, region: "europe" },
+  { city: "Rome (FCO)", code: "FCO", lat: 41.8003, lon: 12.2389, region: "europe" },
+  { city: "Milan (MXP)", code: "MXP", lat: 45.6306, lon: 8.7281, region: "europe" },
+  { city: "Madrid", code: "MAD", lat: 40.4983, lon: -3.5676, region: "europe" },
+  { city: "Barcelona", code: "BCN", lat: 41.2974, lon: 2.0833, region: "europe" },
+  { city: "Lisbon", code: "LIS", lat: 38.7742, lon: -9.1342, region: "europe" },
+  { city: "Brussels", code: "BRU", lat: 50.9014, lon: 4.4844, region: "europe" },
+  { city: "Copenhagen", code: "CPH", lat: 55.6180, lon: 12.6560, region: "europe" },
+  { city: "Stockholm", code: "ARN", lat: 59.6498, lon: 17.9238, region: "europe" },
+  { city: "Oslo", code: "OSL", lat: 60.1976, lon: 11.1004, region: "europe" },
+  { city: "Helsinki", code: "HEL", lat: 60.3172, lon: 24.9633, region: "europe" },
+  { city: "Warsaw", code: "WAW", lat: 52.1657, lon: 20.9671, region: "europe" },
+  { city: "Vienna", code: "VIE", lat: 48.1103, lon: 16.5697, region: "europe" },
+  { city: "Athens", code: "ATH", lat: 37.9364, lon: 23.9445, region: "europe" },
+  { city: "Istanbul", code: "IST", lat: 41.2753, lon: 28.7519, region: "europe" },
+  { city: "Manchester", code: "MAN", lat: 53.3537, lon: -2.2750, region: "europe" },
+  { city: "Edinburgh", code: "EDI", lat: 55.9508, lon: -3.3615, region: "europe" },
+  { city: "Reykjavik", code: "KEF", lat: 63.9850, lon: -22.6056, region: "europe" },
+  { city: "Shannon", code: "SNN", lat: 52.7020, lon: -8.9248, region: "europe" },
+  { city: "Dusseldorf", code: "DUS", lat: 51.2895, lon: 6.7668, region: "europe" },
+  { city: "Prague", code: "PRG", lat: 50.1008, lon: 14.2600, region: "europe" },
+  { city: "Budapest", code: "BUD", lat: 47.4369, lon: 19.2556, region: "europe" },
+  { city: "Venice", code: "VCE", lat: 45.5053, lon: 12.3519, region: "europe" },
+  { city: "Naples", code: "NAP", lat: 40.8860, lon: 14.2908, region: "europe" },
+
+  // === ASIA / PACIFIC ===
+  { city: "Tokyo (NRT)", code: "NRT", lat: 35.7647, lon: 140.3864, region: "asia" },
+  { city: "Tokyo (HND)", code: "HND", lat: 35.5494, lon: 139.7798, region: "asia" },
+  { city: "Seoul (ICN)", code: "ICN", lat: 37.4602, lon: 126.4407, region: "asia" },
+  { city: "Beijing", code: "PEK", lat: 40.0799, lon: 116.6031, region: "asia" },
+  { city: "Shanghai (PVG)", code: "PVG", lat: 31.1443, lon: 121.8083, region: "asia" },
+  { city: "Hong Kong", code: "HKG", lat: 22.3080, lon: 113.9185, region: "asia" },
+  { city: "Taipei", code: "TPE", lat: 25.0797, lon: 121.2342, region: "asia" },
+  { city: "Manila", code: "MNL", lat: 14.5086, lon: 121.0198, region: "asia" },
+  { city: "Singapore", code: "SIN", lat: 1.3644, lon: 103.9915, region: "asia" },
+  { city: "Bangkok", code: "BKK", lat: 13.6900, lon: 100.7501, region: "asia" },
+  { city: "Delhi", code: "DEL", lat: 28.5562, lon: 77.1000, region: "asia" },
+  { city: "Mumbai", code: "BOM", lat: 19.0896, lon: 72.8656, region: "asia" },
+  { city: "Sydney", code: "SYD", lat: -33.9461, lon: 151.1772, region: "asia" },
+  { city: "Auckland", code: "AKL", lat: -37.0082, lon: 174.7850, region: "asia" },
+
+  // === MIDDLE EAST / AFRICA ===
+  { city: "Dubai", code: "DXB", lat: 25.2532, lon: 55.3657, region: "middle_east" },
+  { city: "Abu Dhabi", code: "AUH", lat: 24.4539, lon: 54.6513, region: "middle_east" },
+  { city: "Doha", code: "DOH", lat: 25.2731, lon: 51.6081, region: "middle_east" },
+  { city: "Tel Aviv", code: "TLV", lat: 32.0055, lon: 34.8854, region: "middle_east" },
+  { city: "Amman", code: "AMM", lat: 31.7226, lon: 35.9932, region: "middle_east" },
+  { city: "Casablanca", code: "CMN", lat: 33.3675, lon: -7.5898, region: "middle_east" },
+  { city: "Addis Ababa", code: "ADD", lat: 8.9779, lon: 38.7993, region: "middle_east" },
+  { city: "Lagos", code: "LOS", lat: 6.5774, lon: 3.3212, region: "middle_east" },
+  { city: "Accra", code: "ACC", lat: 5.6052, lon: -0.1668, region: "middle_east" },
+];
+
+const regionColors = {
+  domestic: "#f97316",
+  americas: "#06b6d4",
+  europe: "#a78bfa",
+  asia: "#f472b6",
+  middle_east: "#34d399",
+  south_america: "#fbbf24"
+};
+
+const regionNames = {
+  domestic: "Domestic US",
+  americas: "Canada/Mexico/Caribbean",
+  europe: "Europe",
+  asia: "Asia/Pacific",
+  middle_east: "Middle East/Africa",
+  south_america: "Central/South America"
+};
+
+// Great circle interpolation
+function greatCirclePoints(lat1, lon1, lat2, lon2, numPoints = 80) {
+  const toRad = d => d * Math.PI / 180;
+  const toDeg = r => r * 180 / Math.PI;
+  const f1 = toRad(lat1), l1 = toRad(lon1);
+  const f2 = toRad(lat2), l2 = toRad(lon2);
+  const d = 2 * Math.asin(Math.sqrt(
+    Math.pow(Math.sin((f1 - f2) / 2), 2) +
+    Math.cos(f1) * Math.cos(f2) * Math.pow(Math.sin((l1 - l2) / 2), 2)
+  ));
+  if (d < 0.0001) return [[lat1, lon1], [lat2, lon2]];
+  const points = [];
+  for (let i = 0; i <= numPoints; i++) {
+    const frac = i / numPoints;
+    const A = Math.sin((1 - frac) * d) / Math.sin(d);
+    const B = Math.sin(frac * d) / Math.sin(d);
+    const x = A * Math.cos(f1) * Math.cos(l1) + B * Math.cos(f2) * Math.cos(l2);
+    const y = A * Math.cos(f1) * Math.sin(l1) + B * Math.cos(f2) * Math.sin(l2);
+    const z = A * Math.sin(f1) + B * Math.sin(f2);
+    points.push([toDeg(Math.atan2(z, Math.sqrt(x * x + y * y))), toDeg(Math.atan2(y, x))]);
+  }
+  return points;
+}
+
+// Distance in km
+function haversine(lat1, lon1, lat2, lon2) {
+  const R = 6371;
+  const toRad = d => d * Math.PI / 180;
+  const dLat = toRad(lat2 - lat1), dLon = toRad(lon2 - lon1);
+  const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLon/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+// Initialize map
+const map = L.map('map', {
+  center: [30, -40],
+  zoom: 3,
+  minZoom: 2,
+  maxZoom: 8,
+  worldCopyJump: true,
+  zoomControl: false
+});
+
+L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+// Dark tile layer
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  attribution: '&copy; OpenStreetMap &copy; CARTO',
+  subdomains: 'abcd',
+  maxZoom: 19
+}).addTo(map);
+
+// ORD marker
+const ordIcon = L.divIcon({
+  html: `<div style="
+    width:18px;height:18px;background:#ef4444;border:3px solid #fff;
+    border-radius:50%;box-shadow:0 0 16px rgba(239,68,68,0.7),0 0 40px rgba(239,68,68,0.3);
+  "></div>`,
+  className: '',
+  iconSize: [18, 18],
+  iconAnchor: [9, 9]
+});
+L.marker(ORD, { icon: ordIcon, zIndexOffset: 1000 })
+  .addTo(map)
+  .bindTooltip('Chicago O\'Hare (ORD)', { className: 'tooltip-custom', permanent: false });
+
+// Draw routes and destination markers
+const allLayers = [];
+routes.forEach(r => {
+  const color = regionColors[r.region];
+  const dist = haversine(ORD[0], ORD[1], r.lat, r.lon);
+  const pts = greatCirclePoints(ORD[0], ORD[1], r.lat, r.lon, dist > 5000 ? 100 : 50);
+
+  // Split polyline segments that cross the antimeridian
+  const segments = [[]];
+  for (let i = 0; i < pts.length; i++) {
+    segments[segments.length - 1].push(pts[i]);
+    if (i < pts.length - 1 && Math.abs(pts[i][1] - pts[i+1][1]) > 180) {
+      segments.push([]);
+    }
+  }
+
+  const lines = segments.filter(s => s.length > 1).map(seg =>
+    L.polyline(seg, {
+      color, weight: 1.4, opacity: 0.45,
+      smoothFactor: 1
+    }).addTo(map)
+  );
+
+  const destIcon = L.divIcon({
+    html: `<div style="width:6px;height:6px;background:${color};border-radius:50%;box-shadow:0 0 6px ${color};"></div>`,
+    className: '',
+    iconSize: [6, 6],
+    iconAnchor: [3, 3]
+  });
+  const marker = L.marker([r.lat, r.lon], { icon: destIcon })
+    .addTo(map)
+    .bindTooltip(
+      `<strong>${r.city}</strong> (${r.code})<br>${regionNames[r.region]}<br>${Math.round(dist).toLocaleString()} km / ${Math.round(dist * 0.621371).toLocaleString()} mi`,
+      { className: 'tooltip-custom' }
+    );
+
+  allLayers.push({ route: r, lines, marker });
+});
+
+document.getElementById('route-count').innerHTML = `<strong>${routes.length}</strong> destinations shown`;
+
+// Search
+document.getElementById('search').addEventListener('input', function() {
+  const q = this.value.toLowerCase().trim();
+  allLayers.forEach(({ route, lines, marker }) => {
+    const match = !q || route.city.toLowerCase().includes(q) || route.code.toLowerCase().includes(q);
+    const opacity = match ? 0.45 : 0.04;
+    const weight = match ? (q ? 2.5 : 1.4) : 0.8;
+    lines.forEach(l => l.setStyle({ opacity, weight }));
+    marker.setOpacity(match ? 1 : 0.1);
+  });
+});
+</script>
+</body>
+</html>
